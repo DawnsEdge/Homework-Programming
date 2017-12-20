@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2008
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskApp", "TaskApp\TaskApp.csproj", "{261FDE58-71D5-453B-8861-2DA5A49B9E93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskAppLogic", "TaskAppLogic\TaskAppLogic.csproj", "{5FB9F825-466A-493D-B961-A8BB3BC6D98A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskAppTests", "TaskAppTests\TaskAppTests.csproj", "{A2F722FB-1D8D-4EDF-8276-C5523FC2A6CB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{261FDE58-71D5-453B-8861-2DA5A49B9E93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{261FDE58-71D5-453B-8861-2DA5A49B9E93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{261FDE58-71D5-453B-8861-2DA5A49B9E93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{261FDE58-71D5-453B-8861-2DA5A49B9E93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FB9F825-466A-493D-B961-A8BB3BC6D98A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FB9F825-466A-493D-B961-A8BB3BC6D98A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FB9F825-466A-493D-B961-A8BB3BC6D98A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FB9F825-466A-493D-B961-A8BB3BC6D98A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2F722FB-1D8D-4EDF-8276-C5523FC2A6CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2F722FB-1D8D-4EDF-8276-C5523FC2A6CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2F722FB-1D8D-4EDF-8276-C5523FC2A6CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2F722FB-1D8D-4EDF-8276-C5523FC2A6CB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {45329E5C-662D-41CF-9DF5-5CD88B56D47F}
+	EndGlobalSection
+EndGlobal
