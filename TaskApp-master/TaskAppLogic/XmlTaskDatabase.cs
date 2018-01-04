@@ -12,7 +12,7 @@ namespace TaskAppLogic
     {
         public XmlTaskDatabase(IUserDatabase userdatabase, string filename)
         {
-            mUserDatabase = (MyUserDatabase)userdatabase;
+            mUserDatabase = (XmlUserDatabase)userdatabase;
             mFilename = filename;
 
             if (File.Exists(mFilename))
@@ -20,13 +20,17 @@ namespace TaskAppLogic
                 using (FileStream input = File.OpenRead(mFilename))
                 {
                     mTasks = (List<XmlTask>)mSerializer.Deserialize(input);
+                    foreach(XmlTask xml in mTasks)
+                    {
+                        xml.AssignedTo = mUserDatabase.GetUser(xml.AssignedToUserName);
+                    }
                 }
             }
         }
 
         public IEnumerable<ITask> GetTasks(IUser user)
         {
-            return mTasks;
+            return mTasks.FindAll(t => t.AssignedTo == user);
         }
 
         public ITask NewTask()
@@ -43,6 +47,8 @@ namespace TaskAppLogic
 
             var xmlTask = (XmlTask)task;
 
+            xmlTask.AssignedToUserName = xmlTask.AssignedTo.UserName;
+
             if (!mTasks.Contains(xmlTask))
             {
                 mTasks.Add(xmlTask);
@@ -54,7 +60,7 @@ namespace TaskAppLogic
             }
         }
 
-        private readonly MyUserDatabase mUserDatabase;
+        private readonly XmlUserDatabase mUserDatabase;
         private readonly string mFilename;
         private List<XmlTask> mTasks = new List<XmlTask>();
         private readonly XmlSerializer mSerializer = new XmlSerializer(typeof(List<XmlTask>));

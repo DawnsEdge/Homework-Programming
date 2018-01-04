@@ -9,27 +9,79 @@ namespace TaskApp
 {
     class App
     {
+        public App()
+        {
+            mTaskDb = new XmlTaskDatabase(mUserDb, "tasks.xml");
+        }
+
         public void Run()
         {
-            for (int attempts = 0; attempts < 3; ++attempts)
+            while(true)
             {
-                mLoggedInUser = SignIn();
-                if (mLoggedInUser != null) break;
-                Console.WriteLine("Error: login attempt failed.");
+                Console.WriteLine("\n(L)ogin or Create a (N)ew profile? ");
+                char lorn = char.ToLower(Console.ReadKey().KeyChar);
+                if(lorn == 'l')
+                {
+                    mLoggedInUser = this.LogIn();
+                    break;
+                }
+                if(lorn == 'n')
+                {
+                    mLoggedInUser = this.Signup();
+                    break;
+                }
             }
 
             // If we couldn't log in after a few tries, exit the program.
             if (mLoggedInUser == null) return;
 
+            
             // Create a temporary task.
+            /*
             var task = mTaskDb.NewTask();
             task.AssignedTo = mLoggedInUser;
             task.Title = "Do stuff";
             task.Due = DateTime.Now + TimeSpan.FromDays(1);
             task.Priority = Priority.High;
             mTaskDb.SaveTask(task);
-
+            */
             MainMenu();
+        }
+
+        private IUser LogIn() 
+        {
+            for (int attempts = 0; attempts < 3; ++attempts)
+            {
+                var LoggedInUser = SignIn();
+                if (LoggedInUser != null) return LoggedInUser;
+                Console.WriteLine("\nError: login attempt failed.");
+            }
+            return null;
+        }
+
+        private IUser Signup()
+        {
+            while(true)
+            {
+                Console.WriteLine("\nChoose a username: ");
+                string name = Console.ReadLine();
+                if(mUserDb.GetUser(name) != null)
+                {
+                    Console.WriteLine("Username Taken!");
+                    continue;
+                }
+                Console.WriteLine("Type your Password: ");
+                string password = ConsoleHelpers.ReadPasswordLine();
+                Console.WriteLine("Type your Password again: ");
+                string password2 = ConsoleHelpers.ReadPasswordLine();
+                if(password != password2)
+                {
+                    Console.WriteLine("The passwords aren't the same!");
+                    continue;
+                }
+                mUserDb.AddUser(name, password);
+                return mUserDb.GetUser(name);
+            }
         }
 
         private IUser SignIn()
@@ -39,7 +91,7 @@ namespace TaskApp
             Console.Write("Enter your password: ");
             string password = ConsoleHelpers.ReadPasswordLine();
 
-            return mUserDb.Login(username, password);
+            return (IUser)mUserDb.Login(username, password).User;
         }
 
         private void MainMenu()
@@ -50,6 +102,8 @@ namespace TaskApp
 Main menu:
     (L)ist my tasks
     (Q)uit
+    (A)dd a task
+    (F)inish a task
 
 What'll it be? ");
 
@@ -85,7 +139,7 @@ What'll it be? ");
                         {
                             break;
                         }
-                        ttask.Description = "Done";
+                        ttask.AssignedTo = null;
                         break;
                     default:
                         Console.WriteLine("\nI don't know that command.");
@@ -105,13 +159,13 @@ What'll it be? ");
             Console.WriteLine($"\nOk, here are the tasks for {user.UserName}:");
             foreach (var task in mTaskDb.GetTasks(user))
             {
-                Console.WriteLine($"\t{task.Title}, due {task.Due}, priority {task.Priority}");
+                Console.WriteLine($"\t{task.Title}, due {task.Due}, priority {task.Priority}, description {task.Description}");
             }
             Console.WriteLine();
         }
 
-        private ITaskDatabase mTaskDb = new XmlTaskDatabase(new MyUserDatabase(), "tasks.xml");
-        private IUserDatabase mUserDb = new MyUserDatabase();
+        private IUserDatabase mUserDb = new XmlUserDatabase("users.xml");
+        private ITaskDatabase mTaskDb;
         private IUser mLoggedInUser = null;
     }
 }
