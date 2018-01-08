@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace TaskAppLogic
 {
+    public enum Rank
+    {
+        Member,
+        Admin
+    }
+
     public enum Priority
     {
         Low,
@@ -45,5 +51,20 @@ namespace TaskAppLogic
         IEnumerable<ITask> GetTasks(IUser user);
         ITask NewTask();
         void SaveTask(ITask task);
+    }
+
+    public interface IGroup
+    {
+        IUser GetUser(string username);
+        void AddMember(string username, Rank rank, List<IUser> player);
+        string GroupName { get; set; }
+        Dictionary<IUser, Rank> Members { get; }
+    }
+
+    public interface IGroupDatabase
+    {
+        void AddGroup(string groupname, IUser user);
+        IGroup GetGroup(string groupname);
+        List<XmlGroup> Groups { get; set; }
     }
 }

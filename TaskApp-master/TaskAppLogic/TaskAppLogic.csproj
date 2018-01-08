@@ -40,10 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MemberDTO.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="MockTaskDatabase.cs" />
     <Compile Include="MyUserDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlGroupDatabase.cs" />
     <Compile Include="XmlTaskDatabase.cs" />
     <Compile Include="XmlUserDatabase.cs" />
   </ItemGroup>

@@ -12,6 +12,7 @@ namespace TaskApp
         public App()
         {
             mTaskDb = new XmlTaskDatabase(mUserDb, "tasks.xml");
+            mGroupDb = new XmlGroupDatabase("groups.xml", mUserDb);
         }
 
         public void Run()
@@ -63,20 +64,20 @@ namespace TaskApp
         {
             while(true)
             {
-                Console.WriteLine("\nChoose a username: ");
+                Console.Write("\nChoose a username: ");
                 string name = Console.ReadLine();
                 if(mUserDb.GetUser(name) != null)
                 {
                     Console.WriteLine("Username Taken!");
                     continue;
                 }
-                Console.WriteLine("Type your Password: ");
+                Console.Write("\nType your Password: ");
                 string password = ConsoleHelpers.ReadPasswordLine();
-                Console.WriteLine("Type your Password again: ");
+                Console.Write("\nType your Password again: ");
                 string password2 = ConsoleHelpers.ReadPasswordLine();
                 if(password != password2)
                 {
-                    Console.WriteLine("The passwords aren't the same!");
+                    Console.WriteLine("\nThe passwords aren't the same!");
                     continue;
                 }
                 mUserDb.AddUser(name, password);
@@ -86,7 +87,7 @@ namespace TaskApp
 
         private IUser SignIn()
         {
-            Console.Write("Enter your user name: ");
+            Console.Write("\nEnter your user name: ");
             string username = Console.ReadLine();
             Console.Write("Enter your password: ");
             string password = ConsoleHelpers.ReadPasswordLine();
@@ -104,6 +105,8 @@ Main menu:
     (Q)uit
     (A)dd a task
     (F)inish a task
+    (M)ake a Group
+    List the (G)roups I'm in
 
 What'll it be? ");
 
@@ -141,6 +144,15 @@ What'll it be? ");
                         }
                         ttask.AssignedTo = null;
                         break;
+                    case 'm':
+                        Console.WriteLine("\nType the name of the Group you want to make");
+                        Console.Write("> ");
+                        string groupnm = Console.ReadLine();
+                        mGroupDb.AddGroup(groupnm, mLoggedInUser);
+                        break;
+                    case 'g':
+                        ListGroups(mLoggedInUser);
+                        break;
                     default:
                         Console.WriteLine("\nI don't know that command.");
                         break;
@@ -152,6 +164,17 @@ What'll it be? ");
         {
             var task = mTaskDb.GetTasks(user).Where(t => t.Title == taskName).FirstOrDefault();
             return task;
+        }
+
+        private void ListGroups(IUser user)
+        {
+            Console.WriteLine("\nHere are your Groups:");
+            var yourgroups = mGroupDb.Groups.FindAll(g => g.GetUser(user.UserName) != null);
+            foreach(var group in yourgroups)
+            {
+                var yourrank = group.Members.Where(u => u.Key == user).FirstOrDefault().Value;
+                Console.WriteLine($"\tGroup Name: {group.GroupName}   Your Rank: {yourrank.ToString()}");
+            }
         }
 
         private void ListTasks(IUser user)
@@ -166,6 +189,7 @@ What'll it be? ");
 
         private IUserDatabase mUserDb = new XmlUserDatabase("users.xml");
         private ITaskDatabase mTaskDb;
+        private IGroupDatabase mGroupDb;
         private IUser mLoggedInUser = null;
     }
 }
